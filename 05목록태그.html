@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="kor">
+        <head>
+            <meta charset="UTF-8">
+            <title> 목록태그</title>
+        </head>
+        <body>
+            <h1>목록태그</h1>
+            <h2>순서없는 목록</h2>
+            <h3>내가 좋아하는 음식 best 5</h3>
+            <ul> <!--   type = "disc"와 동일   -->
+                    <li>파스타</li>
+                    <li>똠얌꿍</li>
+                    <li>소고기</li>
+                    <li>치킨</li>
+                    <li>양꼬치</li>
+            </ul>
+            <ul type="square">
+                    <li>파스타</li>
+                    <li>똠얌꿍</li>
+                    <li>소고기</li>
+                    <li>치킨</li>
+                    <li>양꼬치</li>
+            </ul>
+            <ul type="circle">
+                    <li>파스타</li>
+                    <li>똠얌꿍</li>
+                    <li>소고기</li>
+                    <li>치킨</li>
+                    <li>양꼬치</li>
+            </ul>
+            <ul> <!--   중첩가능    -->
+                    <li>분식</li>
+                            <ul>
+                                    <li>라면</li>
+                                            <ul>
+                                                    <li>떡라면</li>
+                                                    <li>치즈라면</li>
+                                                    <li>매운라면</li>
+                                            </ul>
+                                    <li>떡볶이</li>
+                                    <li>김밥</li>
+                            </ul>
+            </ul>
+        <h2>순서 있는 목록</h2>
+        <h3>내가 좋아하는 음식 best5</h3>
+        <ol>
+                <li>파스타</li>
+                <li>똠얌꿍</li>
+                <li>소고기</li>
+                <li>치킨</li>
+                <li>양꼬치</li>
+        </ol>
+        <ol type="I">
+                <li>파스타</li>
+                <li>똠얌꿍</li>
+                <li>소고기</li>
+                <li>치킨</li>
+                <li>양꼬치</li>
+        </ol>
+        <ol type="a">
+                <li>파스타</li>
+                <li>똠얌꿍</li>
+                <li>소고기</li>
+                <li>치킨</li>
+                <li>양꼬치</li>
+        </ol>
+        <ol type="I">
+        <!--   ul태그와는 달리 목록을 중첩시키면 기호가 자동으로 안바뀜    -->
+                    <li>분식</li>
+                            <ol type='1'>
+                                    <li>라면</li>
+                                            <ol type=a>
+                                                    <li>떡라면</li>
+                                                    <li>치즈라면</li>
+                                                    <li>매운라면</li>
+                                            </ol>
+                                    <li>떡볶이</li>
+                                    <li>김밥</li>
+                            </ol>
+            </ol>
+            <hr>
+            <h2> 정의 목록 </h2>
+            <dl>
+                    <dt>WWW</dt>
+                    <dd>WWW는 World Wide Web 의 약자</dd>
+
+                    <dt>HTML</dt>
+                    <dd>HTML는 Hypertext Markup Language 의 약자</dd>
+
+                    <dt> CSS </dt>
+                    <dd>CSS는 Cascade Style Sheet 의 약자</dd>
+            </dl>
+        </body>
+</html>
+<!--
+목록 다루기
+리스트: 여러 요소들을 일렬로 나열한 목록이나 명단을 의미
+HTML에서는 ul, ol, dl 이라는 태그로 표현가능
+
+또한, 웹페이지 내 메뉴를 정의할때나 상품 목록을 나타낼 때에도 사용함
+
+정의목록
+용어와 그 용어의 뜻을 나열할 때 사용
+정의목록은 dl태그, 용어는 dt태그, 용어뜻은 dd태그 사용
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
