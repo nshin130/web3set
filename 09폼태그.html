@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="kor">
+        <head>
+            <meta charset="UTF-8">
+            <title> 폼태그</title>
+        </head>
+        <body>
+            <h1>폼태그</h1>
+            <h2>간단한 폼 작성하기 - login </h2>
+            <form method="" name="loginfrm">
+                <div>아이디: <input type="text" name="uid"></div>
+                <div>비밀번호: <input type="password" name="pwd"></div>
+                <div><button type="submit"> 로그인</button></div>
+            </form>
+
+            <h2>다양한 입력요소 알아보기</h2>
+            <form name="anotherfrm" method="post">
+                <div>성별:  <input type="radio" name="gender" value="M">남
+                    <input type="radio" name="gender" value="F">여</div>
+                <div>취미:  <input type="checkbox" name="hobby" value="book">독서
+                                     <input type="checkbox" name="hobby" value="trip">여행
+                                     <input type="checkbox" name="hobby" value="workout">운동
+                                     <input type="checkbox" name="hobby" value="chocolate">초코
+                </div>
+
+                <div> 전화번호
+                    <select name="hp1"><option>-국번-</option>
+                        <option>010</option>
+                        <option>011</option>
+                        <option>016</option>
+                    </select>
+                    <input type="text" name="hp2" size="5">-
+                    <input type="text" name="hp3" size="5">
+                </div>
+                <div>자기소개 :
+                <textarea name="intro" cols="50" rows="10" ></textarea>
+                </div>
+                <div><button type="submit">입력</button></div>
+            </form>
+
+                <div>
+                    <p style="background: yellow">Hello, World</p> <!--배경색 -->
+                <p style="color: blueviolet">Hello, World</p> <!--글자색 -->
+                <p style="text-align: center">Hello, World</p> <!-- 정렬 -->
+                </div>
+
+            <hr>
+            <h2>실습</h2>
+            <table border="0" cellspacing="0" cellpadding="10">
+                <tr><th style="background: lightgrey">아이디</th>
+                    <td>
+                        <div>*<input type="text" name="uid">
+                        <button type="submit" style="text-align: center">ID중복 검사</button></div>
+                        <div>아이디는 영문,숫자 조합으로 하셔야 합니다.[4자리이상 12자리 이하]</div>
+                        <div>아이디는 소문자로 저장 됩니다.</div>
+                    </td></tr>
+
+                    <tr><th style="background: lightgrey">암호</th>
+                        <td><div>*<input type="password" name="pwd"></div>
+                        <div>비밀번호는 4자리이상 12자리이하로 입력해주세요.</div></td></tr>
+
+                    <tr><th style="background: lightgrey">암호확인</th>
+                        <td><div>*<input type="password" name="pwdchk"></div></td></tr>
+
+                    <tr><th style="background: lightgrey">이름</th>
+                        <td><div>*<input type="text" name="name"></div></td></tr>
+
+                    <tr><th style="background: lightgrey">대화명</th>
+                        <td><div><input type="text" name="nickname">
+                        <button type="submit" style="text-align: center" name="nickchk">중복검사</button></div>
+                        <div>대화명을 지정하지 않으시면 회원님의 이름으로 대화명이 지정됩니다.</div>
+                        <div>대화명은 한글, 영문 관계없이 10글자 이내로 하셔야 합니다.</div>
+                        </td>
+                    </tr>
+
+                    <tr><th style="background: lightgrey" style="text-align: left">주민등록번호</th>
+
+                    </tr>
+
+
+            </table>
+        </body>
+</html>
+
+<!--
+Form 폼
+사용자가 서버에 어떤 정보를 요청해서
+결과를 받아오기 위해 작성하는 특별한 양식을 의미
+
+action : 클라이언트가 전송할 데이터를 처리할 대상을 지정
+             (웹어플리케이션 서버가 반드시 필요!)
+
+encypte : 클라이언트가 전송한 데이터 유형
+                (텍스트, 혼합(다중: 텍스트+바이너리))
+
+method : 클라이언트의 데이터를 서버로 어떻게 전달할지 결정
+    post vs get
+    get : url 뒤에 질의 문자열(querystring)을 추가해서 서버에 전달함
+        ig. show.jsp?userid=abc&passwd=123
+             데이터가 외부에 그대로 노출, 전송할 수 있는 데이터의 크기 또한 제한적
+             데이터의 중요도가 낮고, 크기가 작으며 공개되어도 상관없는 경우 사용
+             심지어 form없이 서버로 데이터를 전송할 수 있음
+    post : http 요청헤더에 담아서 서버로 전송
+              데이터가 외부에 노출되지 않음, 전송할 수 있느느데이터의 크기 무제한
+              보안성과 활용성이 get방식보다는 나음
+
+폼관련 요소
+label : 폼의 이름을 붙일때 사용하는 태그
+            for라는 속성을 이용해 관련있는 입력요소의 id값을 지정해야 함
+
+input : 사용자로부터 데이터를 입력받을때 사용하는 태그
+            placeholder :
+            type : 입력할 데이터 유형 정의
+                        text, password : 문자데이터
+                        textarea : 대량 문자 데이터
+                        radio, checkbox, select : 다중 선택 데이터
+            name : 서버로 전송시 사용할 데이터 이름
+-->
+
+
+
+
+
+
+
