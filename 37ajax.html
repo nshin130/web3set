@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <title>Ajax</title>
+    </head>
+    <body>
+        <h1>Ajax</h1>
+        <p>Ajax 통신결과<span id="msg"></span></p>
+        <div><button type="button" id='saybtn'>인사말하기</button></div>
+
+        <script>
+            let saybtn = document.getElementById('saybtn');
+            let msg = document.getElementById('msg');
+            saybtn.addEventListener('click', sayHello);
+
+            function sayHello() {
+                //1.XMLHttpRequest 객체 초기화
+                //2.서버에 비동기 요청 보내기
+                //3.서버에서 응답이 오면 나머지 처리
+
+                //1.
+                let req=new XMLHttpRequest();
+
+                //3. 서버의 응답에 따라 처리할 절차를 콜백함수로 정의
+                // readystatechange : 서버에서의 응답여부 확인 이벤트 속성
+
+                // readystate : 서버응답 속성
+                // 0 : 초기화되지 않음
+                // 1 : 서버와 연결성공
+                // 2 : 서버와 요청수락
+                // 3 : 서버가 요청처리중
+                // 4 : 서버가 요청처리완료 & 곧 응답예정
+
+                // status : HTTP 상태코드 - 요청 성공 여부 확인
+                // 200 : 처리완료, 응답 잘 받음
+                // 404 : 처리실패, 요청데이터가 존재하지 않음
+                // 500 : 처리실패, 서버상 코드의 오류
+
+                req.onreadystatechange=function() {
+                    console.log(req.readyState);
+
+                    if (req.readyState==4) {
+                        if (req.status==200) {
+                            msg.innerHTML=req.responseText;
+                        } else {
+                            msg.innerHTML=req.status;
+                        }
+                    } else {
+                        msg.innerHTML=req.readyState;
+                    }
+                };
+
+                //2. 비동기 요청을 생성하고 서버로 보냄
+                // open(요청방식, url, 비동기 여부)
+                req.open('get','hello.txt',true);
+                req.send();
+            }
+        </script>
+        <h1>회원가입시 아이디 중복체크</h1>
+        <form name="joinfrm">
+           <div>이름 : <input type="text" name="name"></div>
+           <div>아이디 : <input type="text" name="userid" id="userid"></div>
+                                    <span id="isjoin"></span>
+                                    <!--아이디 존재여부 알려주는 문구 공간-->
+            <div>비밀번호 : <input type="password" name="passwd"></div>
+            <div>비밀번호 확인 : <input type="password" name="passwd"></div>
+            <div><button type="button" id="joinbtn">로그인</button></div>
+
+        </form>
+        <script>
+            // 아이디 중복검사를 비동기방식으로 처리함
+            // localhost: 8080/checkuid.jsp?uid=zzyzzy를 (get 방식: form없이 쿼리 시스템으로 보내는)
+            // 서버에 요청하고 넘어온 결과에 따라 사용가능/사용불가 아이디라고 출력
+
+            //userid에 이벤트 걸어야함
+            let userid=document.getElementById('userid');
+            userid.addEventListener('blur',checkuid);
+
+            function checkuid() {
+                let req= new XMLHttpRequest();
+                req.onreadystatechange=function(){
+                    if (req.readyState ==4 && req.status==200) {
+                        printcheckuid(req.responseText);
+                        //클라이언트 요청이 제대로 전달 되어 처리되고 제대로 처리되었다는 응답이 넘어왔다면
+                        //받은 응답을 printcheckuid라는 함수에 넘긴다는 뜻
+                    } else {
+                        console.log(req.readyState+'/'+req.status);
+                    }
+                }; //콜백함수
+
+                //http://localhost:8080/checkuid.jsp/?uid=중복검사아이디
+                let qry = '?uid='+userid.value;
+                let url = 'http://localhost:8080/checkuid.jsp';
+                req.open('GET',url+qry,true);
+                //호출하는방식, 호출할주소, 비동기방식 여부
+                req.send();
+            }
+
+            // 왜 매개변수 넣는지?
+            function printcheckuid(res) {
+                    let isjoin = document.getElementById('isjoin');
+                    isjoin.style.fontWeight='bold';
+                    console.log(res);
+                    // 왜 오류가 뜨는지 확인하기 위함 (왜 존재한 아이디도 사용가능하다고 뜨는지 (공백때문이었음))
+
+                    // .trim 사용해서 공백 없앰
+                    if(res.trim() == 'yes') {
+                        isjoin.innerHTML = ' 아이디가 존재합니다! ';
+                        isjoin.style.color='red';
+                    } else {
+                        isjoin.innerHTML='사용가능한 아이디 입니다!';
+                        isjoin.style.color='blue';
+
+                    }
+            }
+        </script>
+
+        <h1>주소검색</h1>
+        <div>
+            <select id="sido"></select>
+
+            <select id="gugun"></select>
+
+            <select id="dong"></select>
+        </div>
+
+        <p id="addr"></p>
+
+        <script>
+            //1. 시도에 목록 출력 (sido.jsp)
+            // sql: select distinct sido from zipcode;
+
+            let sido = document.getElementById('sido');
+
+            //서버로 부터 전국 시도 데이터를 불러와 select태그 생성
+            (function getsido() {
+                let req = new XMLHttpRequest();
+                //객체생성
+                req.onreadystatechange=function() {
+                    if(req.readyState==4 && req.status==200) {
+                        makesido(req.responseText);
+                    }
+                };
+                let url = 'http://localhost:8080/sido.jsp';
+
+                req.open('GET',url,true);
+                req.send();
+            })();
+
+             function makesido (res) {
+                 let cols = res.split(',');
+
+                 var opt = document.createElement('option');
+                 var text = document.createTextNode('-- 시/도 --');
+                 opt.appendChild(text);
+                 sido.appendChild(opt);
+
+                 for(let col of cols) {
+                     if (col.trim()=='') continue;
+                     opt = document.createElement('option');
+                     text = document.createTextNode(col.trim());
+                     opt.appendChild(text);
+                     sido.appendChild(opt);
+                 }
+             }
+
+            //2. 선택한 시도로 구군을 검색해서 비동기로 처리함 (gugun.jsp)
+            // sql: slect distinct gugun from zipcode where sido=?;
+            sido.addEventListener('change',getgugun)
+
+            let gugun = document.getElementById('gugun');
+
+
+            function getgugun() {
+                let req = new XMLHttpRequest();
+                req.onreadystatechange=function() {
+                    if(req.readyState==4 && req.status==200) {
+                        makegugun(req.responseText);
+                    }
+                };
+
+                let url = 'http://localhost:8080/gugun.jsp';
+                let qry = '?sido='+sido.value;
+                req.open('GET',url+qry,true);
+                req.send();
+
+            };
+
+            function makegugun(res) {
+                let cols = res.split(',');
+                while(gugun.lastChild)
+                    gugun.removeChild(gugun.lastChild);
+                // 중복된거 지우는역할
+
+                var opt = document.createElement('option');
+                var text = document.createTextNode('-- 시/구/군 --');
+                opt.appendChild(text);
+                gugun.appendChild(opt);
+
+                for (let col of cols) {
+                    opt = document.createElement('option');
+
+                    if (sido.value=='세종') {
+                        text = document.createTextNode('');
+                    } else if(col.trim()=='') continue;
+                    else
+                        text = document.createTextNode(col.trim());
+
+                    opt.appendChild(text);
+                    gugun.appendChild(opt);
+                }
+                if(sido.value=='세종')
+                gugun.removeChild(gugun.lastChild);
+            }
+
+            //3. 선:택한 시도, 구군으로 동을 검색해서 비동기로 처리함 (dong.jsp)
+            // sql: select distinct dong from zipcode where sido=? and gugun=?
+            let dong = document.getElementById('dong');
+
+            gugun.addEventListener('change', getdong);
+
+            function getdong() {
+                let req = new XMLHttpRequest();
+                req.onreadystatechange=function() {
+                    if (req.readyState==4 && req.status==200) {
+                        makedong(req.responseText);
+                    }
+
+                };
+
+                let url = "http://localhost:8080/dong.jsp";
+                let qry = "?sido=" + sido.value;
+                    qry += "&gugun=" + gugun.value;
+
+                req.open('GET', url+qry ,true);
+                req.send();
+            };
+
+            function makedong(res) {
+                let cols = res.split(',');
+                while (dong.lastChild)
+                    dong.removeChild(dong.lastChild);
+
+                var opt = document.createElement('option');
+                var text= document.createTextNode('-- 읍/면/동 --');
+                opt.appendChild(text);
+                dong.appendChild(opt);
+
+                for (let col of cols) {
+                    if(col.trim()=='') continue;
+                    opt = document.createElement('option');
+                    text = document.createTextNode(col.trim());
+                    opt.appendChild(text);
+                    dong.appendChild(opt);
+                }
+            }
+
+            //4. 선택한 시도/구군/읍면동을 모아서 출력
+            let addr = document.getElementById('addr');
+            dong.addEventListener('change', makeaddr);
+
+            function makeaddr() {
+                let result = sido.value + '/' + gugun.value + '/' + dong.value;
+                addr.innerHTML=result;
+            }
+
+        </script>
+    </body>
+</html>
+<!--
+Ajax
+Asynchronous Javascript and XML
+Http프로토콜을 이용해서 비동기방식으로 데이터를 주고 받는 기법을 의미
+
+HTTP 프로토콜은 기본적으로 동기방식의 데이터 교환만을 지원했었는데
+1993년 MS의 Microsoft.XMLHTTP 라는 컴퍼넌트 덕택으로
+비동기 처리기술이 활성화됨
+2000년 12월, FF가 XMLHttpRequest라는 이름으로 지원
+그 이후 2004년 4월, CR이 구글맵으로 통해 Ajax기술 지원
+-->
+<!--
+동기 vs 비동기
+동기: Synchronous 모든 작업은 개별 작업의 처리시간에 맞춰 실행되는 방식
+    FIFO: 먼저 요청된 작업이 처리됨.
+          앞서 처리중인 작업의 처리시간이 길어지면,
+          나머지 작업들은 하염없이 기다려야함.
+          ig) 명절 기차표 예매, 은행 송금
+          (순서를 꼭 지켜야 하는 경우)
+
+비동기: Asynchronous 모든 작업은 개별 작업의 처리시간에 상관없이 자발적으로 실행
+    LIFO: 먼저 요청한 작업이 먼저 끝난다고 보장 할 수 없음
+          앞서 처리중인 작업의 처리시간이 길어지면,
+          다른 작업을 우선적으로 처리할 수 있음.
+          ig) 마트 물건 계산
+          (자원을 효율적으로 사용할 수 있음)
+-->
+<!--
+https://developer.mozilla.org/ko/docs/Web/Guide/AJAX/Getting_started
+-->
+<!--
+JSP 환경구축 순서(window)
+1. JDK 설치 - amazon correto JDK 8
+   JAVA_HOME 환경변수 설정
+
+2. tomcat.apache.org에서 Tomcat 8.5.61 다운로드
+   WAS : web application server
+   윈도우 : 64bit window zip
+   맥 : tar.gz
+   c:/Java에 압축해제 (적당한곳에 압축해제 현재: Downloads에 있음)
+
+3. 기본 페이지 띄우기
+   bin 아래 startup.bat 실행
+   브라우져에서 127.0.0.1:8080 입력 -> welcome 페이지 확인
+   맥 : terminal ====> startup.sh 까지실행
+   브라우저에서 localhost:8080입력 -> 웰컴 페이지 확임
+
+4. 개발용 페이지 띄우기
+   webapps/ROOT 디렉토리에 jsp파일 복사 (checkuid.jsp/sido.jsp/...)
+   브라우져에서 localhost:8080/jsp파일명
+   localhost:8080/checkuid.jsp
+   localhost:8080/sido.jsp
+
+5. jdbc 드라이버 저장
+   webapps/ROOT 디렉토리 아래에 WEB_INF/lib 포럳 생성
+   여기에 jdbc 드라이버들을 복사해 둠
+   (mariadb-java-client-2.4.3.jar, ojdbc7.jar)
+   물론 bin아래 shutdown.sh/shutdonw.bat 실행후
+   다시 startup.sh/startup.bat 실행
+-->
+<!--
+CORS
+corss-origin resource sharing
+보안상의 이유로 스크립트내에서 실행중인 호스트와 다른
+호스트를 비동기방식으로 불러오지 못하게 제한하는 기법
+
+즉, 37ajax.html이 실행되는 호스트: localhost:64512
+비동기로 실행되는 checkuid.jsp의 호스트: localhost:8080
+따라서, 동일한 호스트에서 실행되어야 CORS로 인한 제한이 해소됨
+=> 37ajax.html도 톰캣서버에 저장해야함(webapps/ROOT 디렉토리에 복사후          localhost:8080/37ajax.html로 재접속)
+
+RESTful API => REACT, vue.js
+마이크로 서비스 형태의 웹프로그래밍 <-> 모노리스 서비스 형태의 웹프로그래밍
+
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
